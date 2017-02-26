@@ -1,6 +1,7 @@
 extern crate gameoflife;
 
 use gameoflife::simulate;
+use gameoflife::simulate::Simulation;
 
 // [0, 1] == row 0 column 1
 
@@ -25,6 +26,9 @@ fn glider_test() {
     gen_1[2][1] = 1;
     gen_1[2][2] = 1;
 
-    let res_1 = simulate::get_next_gen(&gen_0);
+    let mut field = simulate::Conway::new(gen_0);
+    assert_eq!(gen_0, field.state());
+    field.advance(1);
+    let res_1 = field.state();
     assert_eq!(gen_1, res_1);
 }
