@@ -27,8 +27,19 @@ fn glider_test() {
     gen_1[2][2] = 1;
 
     let mut field = simulate::Conway::new(gen_0);
-    assert_eq!(gen_0, field.state());
+    assert!(check_slice_vec_eq(&gen_0, field.state()));
     field.advance(1);
-    let res_1 = field.state();
-    assert_eq!(gen_1, res_1);
+    assert!(check_slice_vec_eq(&gen_1, field.state()));
+}
+
+fn check_slice_vec_eq(left: &[[u8; 10]; 10], right: Vec<Vec<u8>>) -> bool {
+    for i in 0..10 {
+        for k in 0..10 {
+            if left[i][k] != right[i][k] {
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
