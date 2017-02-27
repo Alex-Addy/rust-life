@@ -2,7 +2,9 @@ use std::io::Write;
 use std::io;
 
 pub fn dump_board<T: Write>(w: &mut T, board: Vec<Vec<u8>>) -> io::Result<()> {
-    let dead = '□';
+    // let dead = '□';
+
+    let dead = ' ';
     let live = '■';
     let unknown = '?';
 
