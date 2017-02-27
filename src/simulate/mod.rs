@@ -1,6 +1,6 @@
 
 pub trait Simulation {
-    fn state(&self) -> [[u8; 10]; 10];
+    fn state(&self) -> Vec<Vec<u8>>;
     fn advance(&mut self, generations: u8);
 }
 
@@ -114,11 +114,21 @@ impl Conway {
 }
 
 impl Simulation for Conway {
-    fn state(&self) -> [[u8; 10]; 10] {
-        match self.current_field {
-            FrontField::FieldOne => self.board_1.clone(),
-            FrontField::FieldTwo => self.board_2.clone(),
+    fn state(&self) -> Vec<Vec<u8>> {
+        let b = match self.current_field {
+            FrontField::FieldOne => self.board_1,
+            FrontField::FieldTwo => self.board_2,
+        };
+        let mut out = Vec::with_capacity(10);
+        for row in b.iter() {
+            let mut r = Vec::with_capacity(10);
+            for cell in row.iter() {
+                r.push(*cell);
+            }
+            out.push(r);
         }
+
+        out
     }
 
     fn advance(&mut self, generations: u8) {
