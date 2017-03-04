@@ -12,7 +12,7 @@ use gameoflife::simulate::Simulation;
 use gameoflife::display;
 
 fn main() {
-    let mut gen_0 = [[0u8; 10]; 10];
+    let mut gen_0 = vec![vec![0u8; 40]; 30];
     // __X
     // X_X
     // _XX
@@ -24,13 +24,13 @@ fn main() {
     let mut field = simulate::Conway::new(gen_0);
     let mut stdout = io::stdout();
 
-    for _ in 0..12 {
+    for _ in 0..40 {
         print!("{}{}", cursor::Goto(1, 1), clear::AfterCursor);
         field.advance(1);
         display::dump_board(&mut stdout, field.state()).unwrap_or_else(|e: io::Error| {
             println!("{}", e);
         });
-        thread::sleep(time::Duration::from_millis(1000));
+        thread::sleep(time::Duration::from_millis(500));
     }
 
 }
