@@ -7,39 +7,38 @@ use gameoflife::simulate::Simulation;
 
 #[test]
 fn glider_test() {
-    let mut gen_0 = [[0u8; 10]; 10];
     // __X
     // X_X
     // _XX
+    let mut gen_0 = vec![vec![0u8; 10]; 10];
     gen_0[0][2] = 1;
     gen_0[1][0] = 1;
     gen_0[1][2] = 1;
     gen_0[2][1] = 1;
     gen_0[2][2] = 1;
-    let mut gen_1 = [[0u8; 10]; 10];
     // _X__
     // __XX
     // _XX_
+    let mut gen_1 = vec![vec![0u8; 10]; 10];
     gen_1[0][1] = 1;
     gen_1[1][2] = 1;
     gen_1[1][3] = 1;
     gen_1[2][1] = 1;
     gen_1[2][2] = 1;
+    // __X_
+    // ___X
+    // _XXX
+    let mut gen_2 = vec![vec![0u8; 10]; 10];
+    gen_2[0][2] = 1;
+    gen_2[1][3] = 1;
+    gen_2[2][1] = 1;
+    gen_2[2][2] = 1;
+    gen_2[2][3] = 1;
 
-    let mut field = simulate::Conway::new(gen_0);
-    assert!(check_slice_vec_eq(&gen_0, field.state()));
+    let mut field = simulate::Conway::new(gen_0.clone());
+    assert_eq!(gen_0, field.state());
     field.advance(1);
-    assert!(check_slice_vec_eq(&gen_1, field.state()));
-}
-
-fn check_slice_vec_eq(left: &[[u8; 10]; 10], right: Vec<Vec<u8>>) -> bool {
-    for i in 0..10 {
-        for k in 0..10 {
-            if left[i][k] != right[i][k] {
-                return false;
-            }
-        }
-    }
-
-    return true;
+    assert_eq!(gen_1, field.state());
+    field.advance(1);
+    assert_eq!(gen_2, field.state());
 }
