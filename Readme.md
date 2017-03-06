@@ -6,7 +6,7 @@ Any eventual interface will be focused around benchmarking and running
 predefined scenarios. Interactive activity will be a secondary focus.
 
 ## To Do List
- - [ ] Provide for loading boards from a file.
+ - [x] Provide for loading boards from a file.
  - [ ] Have multiple algorithms for comparing.
  - [ ] Have a proper benchmarking framework.
  - [ ] Provide a GUI.
