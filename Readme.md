@@ -9,5 +9,6 @@ predefined scenarios. Interactive activity will be a secondary focus.
  - [x] Provide for loading boards from a file.
  - [ ] Have multiple algorithms for comparing.
  - [ ] Have a proper benchmarking framework.
- - [ ] Provide a GUI.
  - [ ] Provide introspection of an algorithms memory usage.
+ - [ ] Provide a GUI.
+ - [ ] Get running in Redox.
