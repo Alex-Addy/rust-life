@@ -1,10 +1,88 @@
 
+
 pub trait Simulation {
-    fn state(&self) -> Vec<Vec<u8>>;
+    fn state(&self) -> Board;
     fn advance(&mut self, generations: u8);
 }
 
 type Board = Vec<Vec<u8>>;
+
+pub mod board {
+    use std::fs::File;
+    use std::io::Read;
+    use std::path::Path;
+
+    extern crate rand;
+    use self::rand::Rng;
+
+    use simulate::Board;
+
+    pub fn from_file<P: AsRef<Path>>(path: P) -> Result<Board, String> {
+        let mut board: Board = Vec::new();
+        let mut row = Vec::new();
+        let mut buf = String::new();
+        try!(File::open(path)
+            .and_then(|mut file| file.read_to_string(&mut buf))
+            .map_err(|err| err.to_string()));
+        for c in buf.chars() {
+            match c {
+                '_' | '0' => {
+                    row.push(0);
+                }
+                'X' | '1' => {
+                    row.push(1);
+                }
+                '\n' => {
+                    board.push(row);
+                    row = Vec::new();
+                }
+                _ => {}
+            }
+        }
+        match validate_board(&board) {
+            Ok(()) => Ok(board),
+            Err(e) => Err(e.to_string()),
+        }
+    }
+
+    fn validate_board(b: &Board) -> Result<(), String> {
+        if b.len() == 0 {
+            return Err("board is empty".to_owned());
+        }
+
+        let row_length = b[0].len();
+        for i in 0..b.len() {
+            let ref row = b[i];
+            if row.len() == 0 {
+                return Err(format!("row {} is empty", i));
+            }
+            if row.len() != row_length {
+                return Err(format!("row {} does not have expected length, expected {} got {}",
+                                   i,
+                                   row_length,
+                                   row.len()));
+            }
+        }
+
+        return Ok(());
+    }
+
+    pub fn randomboard(rows: usize, cols: usize) -> Vec<Vec<u8>> {
+        let mut rng = rand::thread_rng();
+        let mut board = vec![vec![0u8; cols]; rows];
+        for r in 0..rows {
+            for c in 0..cols {
+                if rng.gen() {
+                    board[r][c] = 1;
+                } else {
+                    board[r][c] = 0;
+                }
+            }
+        }
+
+        board
+    }
+}
 
 #[derive(Debug)]
 enum FrontField {
