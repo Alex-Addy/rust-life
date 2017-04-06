@@ -11,8 +11,8 @@ extern crate clap;
 use clap::{Arg, App};
 
 extern crate gameoflife;
-use gameoflife::simulate;
 use gameoflife::simulate::Simulation;
+use gameoflife::simulate::simple;
 use gameoflife::display;
 
 fn main() {
@@ -27,8 +27,8 @@ fn main() {
 
     let mut field = match matches.value_of("file") {
         Some(path) => {
-            match simulate::board::from_file(path) {
-                Ok(b) => simulate::Conway::new(b),
+            match simple::board::from_file(path) {
+                Ok(b) => simple::Vec2d::new(b),
                 Err(e) => {
                     println!("Could not load from file: {}", e);
                     return;
@@ -37,8 +37,8 @@ fn main() {
         }
         None => {
             let (horiz, vert) = termion::terminal_size().unwrap();
-            let gen_0 = simulate::board::randomboard((vert - 1) as usize, horiz as usize);
-            simulate::Conway::new(gen_0)
+            let gen_0 = simple::board::randomboard((vert - 1) as usize, horiz as usize);
+            simple::Vec2d::new(gen_0)
         }
     };
     let mut stdout = io::stdout();
